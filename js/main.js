@@ -16,3 +16,40 @@ async function geojsonFetch() {
 };
 
 geojsonFetch();
+
+map.on('load', function loadingData() {
+
+    map.addSource ('earthquakes', {
+        type: 'geojson',
+        data: earthquakes
+    });
+
+    map.addLayer({
+        'id':'earthquakes-layer',
+        'type':'circle',
+        'source':'earthquakes',
+        'paint':{
+            'circle-radius': 8,
+            'circle-stroke-width': 2,
+            'circle-color': 'red',
+            'circle-stroke-color':'white'
+        }
+    })
+
+
+    map.addSource('japan', {
+        type: 'geojson',
+        data: japan
+    });
+
+    map.addLayer({
+        'id': 'japan-layer',
+        'type':'fill',
+        'source': 'japan',
+        'paint':{
+            'fill-color': '#0080ff',
+            'fill-opacity': 0.5
+        }
+    });
+
+})
