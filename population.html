@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <meta charset="utf-8">
+        <title>Population List</title>
+        <meta name="viewpoint" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+        <link href="https://api.mapbox.com/mapbox-gl-js/v2.5.0/mapbox-gl.css" rel="stylesheet">
+        <script src="https://api.mapbox.com/mapbox-gl-js/v2.5.0/mapbox-gl.js"></script>
+        <style>
+            body {
+                margin: 0;
+                padding: 0;
+            }
+
+            #container {
+                display: flex;
+                height: 100vh;
+                flex-direction: row;
+                align-items: stretch;
+            }
+
+            #side-panel {
+                flex-basis: 500px;
+                overflow-y: scroll;
+            }
+
+            #map {
+                flex-grow: 1;
+            }
+
+            button{
+                margin-bottom: 10px;
+            }
+
+            table {
+                border-collapse: collapse;
+                border-spacing: 0;
+                width: 100%;
+                border: 1px solid #ddd;
+            }
+
+            th,
+            td {
+                text-align: left;
+                padding: 16px;
+            }
+
+            tr:nth-child(even) {
+                background-color: #f2f2f2;
+            }
+        </style>
+    </head>
+    <body>
+        <main id="container">
+            <div id="side-panel">
+                <h2>Population List</h2>
+                <button>Sort by population density</button>
+
+                <table>
+                    <tr>
+                        <th>name</th>
+                        <th>population</th>
+                        <th>density</th>
+                    </tr>
+                </table>
+
+            </div>
+            <div id="map"></div>
+        </main>
+        <script>
+            mapboxgl.accessToken = 'pk.eyJ1Ijoic3RlcGhlbnd6eSIsImEiOiJja3Y4b2txcW8ya24zMndtczJwa256cTdwIn0.6Asu6a19dzDDHyIqZOFE6g';
+
+            let map = new mapboxgl.Map ({
+                container: 'map',
+                style: 'mapbox://styles/mapbox/satellite-v9',
+                zoom:3.0,
+                center: [105, 34]
+            });
+
+
+            async function geojsonFetch() {
+
+                let response, capitals, china, table;
+                response = await fetch('assets/capitals.geojson');
+                capitals = await response.json();
+                response = await fetch('assets/china.geojson');
+                china = await response.json();
+
+            
+                map.on('load', function loadingData() {
+
+                    map.addSource('capitals', {
+                        type: 'geojson',
+                        data: capitals
+                    });
+
+                    map.addLayer({
+                        'id':'capitals-layer',
+                        'type':'circle',
+                        'source':'capitals',
+                        'paint':{
+                            'circle-radius': 8,
+                            'circle-stroke-width': 2,
+                            'circle-color': 'red',
+                            'circle-stroke-width': 'white'
+                        }
+                    });
+
+                    /*map.addSource ('china', {
+                        type: 'geojson',
+                        data: china
+                    });
+
+                    map.addLayer({
+                        'id': 'china-layer',
+                        'type':'fill',
+                        'source': 'china',
+                        'paint':{
+                            'fill-color': '#0080ff',
+                            'fill-opacity': 0.3
+                        }
+                    });*/
+
+                });
+
+                table = document.getElementsByTagName("table")[0];
+                let row, cell1, cell2, cell3;
+                for (let i = 0; i < capitals.features.length; i++) {
+                    row = table.insertRow(-1);
+                    cell1 = row.insertCell(0);
+                    cell2 = row.insertCell(1);
+                    cell3 = row.insertCell(2);
+                    cell1.innerHTML = capitals.features[i].properties.name;
+                    cell2.innerHTML = capitals.features[i].properties.population;
+                    cell3.innerHTML = capitals.features[i].properties.density;
+                }
+
+            }
+            geojsonFetch();
+
+        </script>
+    </body>
+</html>
