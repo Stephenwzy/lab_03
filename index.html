@@ -48,11 +48,18 @@
             tr:nth-child(even) {
                 background-color: #f2f2f2;
             }
+
+
+            @media screen and (max-width: 1024px) {
+                .panel {
+                    display: none;
+                }
+            }
         </style>
     </head>
     <body>
         <main id="container">
-            <div id="side-panel">
+            <div id="side-panel" class="panel">
                 <h3>Population list of provincial capitals in China</h3>
                 <button name="population">Sort by population in million</button>
                 <button name="density">Sort by density in people/km^2</button>
@@ -90,23 +97,6 @@
             
                 map.on('load', function loadingData() {
 
-                    map.addSource('capitals', {
-                        type: 'geojson',
-                        data: capitals
-                    });
-
-                    map.addLayer({
-                        'id':'capitals-layer',
-                        'type':'circle',
-                        'source':'capitals',
-                        'paint':{
-                            'circle-radius': 8,
-                            'circle-stroke-width': 2,
-                            'circle-color': 'blue',
-                            'circle-stroke-color': 'white'
-                        }
-                    });
-
                     map.addSource ('china', {
                         type: 'geojson',
                         data: china
@@ -117,8 +107,25 @@
                         'type':'fill',
                         'source': 'china',
                         'paint':{
-                            'fill-color': '#0080ff',
-                            'fill-opacity': 0.3
+                            'fill-color': '#61C9CB',
+                            'fill-opacity': 0.6
+                        }
+                    });
+
+                    map.addSource('capitals', {
+                        type: 'geojson',
+                        data: capitals
+                    });
+
+                    map.addLayer({
+                        'id':'capitals-layer',
+                        'type':'circle',
+                        'source':'capitals',
+                        'paint':{
+                            'circle-radius': 5,
+                            'circle-stroke-width': 2,
+                            'circle-color': 'orange',
+                            'circle-stroke-color': 'black'
                         }
                     });
 

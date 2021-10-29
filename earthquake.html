@@ -49,12 +49,18 @@
             tr:nth-child(even) {
                 background-color: #f2f2f2;
             }
+
+            @media screen and (max-width: 1024px) {
+                .panel {
+                    display: none;
+                }
+            }
         </style>
     </head>
     
     <body>
         <main id="container">
-            <div id="side-panel">
+            <div id="side-panel", class="panel">
 
                 <h2>Earthquake List</h2>
                 <button>Sort by Magnitude</button>
