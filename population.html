@@ -2,7 +2,7 @@
 <html lang="en-US">
     <head>
         <meta charset="utf-8">
-        <title>Population List</title>
+        <title>Population list of provincial capitals in China</title>
         <meta name="viewpoint" content="initial-scale=1,maximum-scale=1,user-scalable=no">
         <link href="https://api.mapbox.com/mapbox-gl-js/v2.5.0/mapbox-gl.css" rel="stylesheet">
         <script src="https://api.mapbox.com/mapbox-gl-js/v2.5.0/mapbox-gl.js"></script>
@@ -54,7 +54,8 @@
         <main id="container">
             <div id="side-panel">
                 <h2>Population List</h2>
-                <button>Sort by population density</button>
+                <button name="population">Sort by population in million</button>
+                <button name="density">Sort by density in people/km^2</button>
 
                 <table>
                     <tr>
@@ -106,7 +107,7 @@
                         }
                     });
 
-                    /*map.addSource ('china', {
+                    map.addSource ('china', {
                         type: 'geojson',
                         data: china
                     });
@@ -119,7 +120,7 @@
                             'fill-color': '#0080ff',
                             'fill-opacity': 0.3
                         }
-                    });*/
+                    });
 
                 });
 
@@ -138,6 +139,75 @@
             }
             geojsonFetch();
 
+            let btn = document.getElementsByTagName("button")[0];
+            let btn2 = document.getElementsByTagName("button")[1];
+
+            btn.addEventListener('click', sortTable_population);
+            btn2.addEventListener('click', sortTable_density);
+
+        
+            function sortTable_population(e) {
+                let table, rows, switching, i, x, y, shouldSwitch;
+                table = document.getElementsByTagName("table")[0];
+                switching = true;
+           
+                while (switching) {
+                
+                    switching = false;
+                    rows = table.rows;
+                
+                    for (i = 1; i < (rows.length - 1); i++) {
+                    
+                        shouldSwitch = false;
+                    
+                        x = parseFloat(rows[i].getElementsByTagName("td")[1].innerHTML);
+                        y = parseFloat(rows[i + 1].getElementsByTagName("td")[1].innerHTML);
+                    
+                        if (x < y) {
+                      
+                            shouldSwitch = true;
+                            break;
+                        }
+                    }
+                    if (shouldSwitch) {
+                    
+                        rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                        switching = true;
+                    }
+                }
+            }
+
+
+            function sortTable_density(e) {
+                let table, rows, switching, i, x, y, shouldSwitch;
+                table = document.getElementsByTagName("table")[0];
+                switching = true;
+           
+                while (switching) {
+                
+                    switching = false;
+                    rows = table.rows;
+                
+                    for (i = 1; i < (rows.length - 1); i++) {
+                    
+                        shouldSwitch = false;
+                    
+                        x = parseFloat(rows[i].getElementsByTagName("td")[2].innerHTML);
+                        y = parseFloat(rows[i + 1].getElementsByTagName("td")[2].innerHTML);
+                    
+                        if (x < y) {
+                      
+                            shouldSwitch = true;
+                            break;
+                        }
+                    }
+                    if (shouldSwitch) {
+                    
+                        rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                        switching = true;
+                    }
+                }
+            }
         </script>
     </body>
 </html>
